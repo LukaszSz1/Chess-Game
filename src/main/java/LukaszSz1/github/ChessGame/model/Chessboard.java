@@ -28,14 +28,17 @@ public class Chessboard {
         }
     }
 
-    //TODO nie zwracać NULL!!!!
+    // TODO nie powinoo się zwracać NULL ale jak zwracam pustą tablicę to ruch skrajnymi pionkami wyrzuca błąd
     public Piece getPieceFromCoordinates(int x, int y) {
-        boolean isCoordOutsideChessboard = (x >= NUMBER_OF_COLUMNS || x < 0 || y >= NUMBER_OF_ROWS || y < 0);
-        if (isCoordOutsideChessboard) {
+        if (isCoordOutsideChessboard(x, y)) {
             return null;
         } else {
             return tileForPiece[x][y];
         }
+    }
+
+    private boolean isCoordOutsideChessboard(final int x, final int y) {
+        return x >= NUMBER_OF_COLUMNS || x < 0 || y >= NUMBER_OF_ROWS || y < 0;
     }
 
     public List<Piece> getWhitePieces() {
@@ -46,7 +49,7 @@ public class Chessboard {
         return blackPieces;
     }
 
-    void addPieceToWhiteOrBlackList(Piece p) {
+    public void addPieceToWhiteOrBlackList(Piece p) {
         if (p.getPlayer() == Player.WHITE) {
             whitePieces.add(p);
         } else {
@@ -54,21 +57,22 @@ public class Chessboard {
         }
     }
 
-    void removePieceFromChessboard(Piece p) {
+    public void removePieceFromChessboard(Piece p) {
         int x = p.getXCoordinate();
         int y = p.getYCoordinate();
         tileForPiece[x][y] = null;
     }
 
-    void setPieceAtCoordinates(Piece p, int x, int y) {
+    public void setPieceAtCoordinates(Piece p, int x, int y) {
         this.tileForPiece[x][y] = p;
     }
 
-    List<Piece> getAllCurrentPiecesFor(Player player) {
+    public List<Piece> getAllCurrentPiecesFor(Player player) {
         if (player == Player.BLACK) {
             return getBlackPieces();
         } else {
             return getWhitePieces();
         }
     }
+
 }

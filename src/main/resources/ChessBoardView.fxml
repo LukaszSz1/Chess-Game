@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="560.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LukaszSz1.github.ChessGame.controllers.ChessboardViewController">
+<AnchorPane fx:id="anchorPane" prefHeight="560.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LukaszSz1.github.ChessGame.controllers.ChessboardViewController">
     <Label layoutX="31.0" layoutY="50.0" prefHeight="25.0" prefWidth="80.0" text="Player White" />
     <Label layoutX="411.0" layoutY="50.0" prefHeight="25.0" prefWidth="80.0" text="Player Black" />
     <TextField fx:id="playerWhiteTimeCounter" editable="false" layoutX="31.0" layoutY="88.0" prefHeight="25.0" prefWidth="70.0" />
     <TextField fx:id="playerBlackTimeCounter" editable="false" layoutX="412.0" layoutY="88.0" prefHeight="25.0" prefWidth="70.0" />
-    <TextField fx:id="messageDisplay" editable="false" layoutX="124.0" layoutY="88.0" prefHeight="25.0" prefWidth="265.0" />
-    <Pane fx:id="pane" layoutY="128.0" prefHeight="433.0" prefWidth="512.0" />
+    <TextField fx:id="messageDisplay" editable="false" layoutX="124.0" layoutY="88.0"  prefHeight="25.0" prefWidth="265.0" />
+    <Pane fx:id="pane" layoutY="128.0" onMouseClicked="#mouseClickedEvent" prefHeight="433.0" prefWidth="512.0" />
    <Button fx:id="startGameButton" layoutX="101.0" layoutY="17.0" mnemonicParsing="false" onAction="#startGameButtonClick" prefHeight="25.0" prefWidth="99.0" text="Start Game" />
    <Button fx:id="restartGameButton" disable="true" layoutX="217.0" layoutY="17.0" mnemonicParsing="false" onAction="#restartGameButtonClick" prefHeight="25.0" prefWidth="99.0" text="Restart Game" />
    <Button fx:id="giveUpButton" disable="true" layoutX="331.0" layoutY="17.0" mnemonicParsing="false" onAction="#giveUpButtonClick" prefHeight="25.0" prefWidth="80.0" text="Give Up" />

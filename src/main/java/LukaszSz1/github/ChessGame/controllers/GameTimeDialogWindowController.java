@@ -17,7 +17,6 @@ public class GameTimeDialogWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // set default chosenTime value
         chosenTime = 5;
 
         SpinnerValueFactory<Integer> itemValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 90, 5) {

@@ -8,7 +8,6 @@ import java.util.List;
 
 import static LukaszSz1.github.ChessGame.model.Chessboard.*;
 
-
 class Knight extends Piece {
 
     Knight(final Chessboard chessboard, final Player player, final DrawingPath drawingPath, final Coordinate coordinates) {

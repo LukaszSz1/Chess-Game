@@ -9,10 +9,10 @@ import java.util.List;
 import static LukaszSz1.github.ChessGame.model.Chessboard.*;
 
 public abstract class Piece {
+    private final Chessboard chessboard;
     private final Coordinate coordinates;
     private final DrawingPath drawingPath;
     private final Player player;
-    private final Chessboard chessboard;
     private final List<Piece> alreadyMovedPieces = new ArrayList<>();
 
     Piece(final Chessboard chessboard, final Player player, final DrawingPath drawingPath, final Coordinate coordinates) {
@@ -23,7 +23,7 @@ public abstract class Piece {
         chessboard.addPieceToWhiteOrBlackList(this);
     }
 
-    abstract List<Coordinate> getCoordinatesOfAllPossibleMoves();
+   public abstract List<Coordinate> getCoordinatesOfAllPossibleMoves();
 
     public int getXCoordinate() {
         return coordinates.getX();
@@ -45,14 +45,14 @@ public abstract class Piece {
         return chessboard;
     }
 
-    void setPieceOnChessboardWithCoordinates(final int x, final int y) {
+   public void setPieceOnChessboardWithCoordinates(final int x, final int y) {
         addPieceToAlreadyMovedPiecesList(); // watch out for this second responsibility
         removePieceFromPreviousCoordinate();
         setNewCoordinate(x, y);
         savePieceOnChessboardWithNewCoordinates(x, y);
     }
 
-    void setPieceOnChessboardWithoutAddingToAlreadyMovedListWithCoordinates(final int x, final int y) {
+   public void setPieceOnChessboardWithoutAddingToAlreadyMovedListWithCoordinates(final int x, final int y) {
         removePieceFromPreviousCoordinate();
         setNewCoordinate(x, y);
         savePieceOnChessboardWithNewCoordinates(x, y);
@@ -67,7 +67,7 @@ public abstract class Piece {
         coordinates.setY(y);
     }
 
-     void removePieceFromPreviousCoordinate() {
+    public void removePieceFromPreviousCoordinate() {
         chessboard.removePieceFromChessboard(this);
     }
 
@@ -79,7 +79,7 @@ public abstract class Piece {
         return alreadyMovedPieces.contains(p);
     }
 
-    void deletePiece() {
+   public void deletePiece() {
         if (player == Player.BLACK) {
             chessboard.getBlackPieces().remove(this);
         } else {

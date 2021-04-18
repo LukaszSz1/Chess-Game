@@ -1,13 +1,16 @@
 package LukaszSz1.github.ChessGame.controllers;
 
-import LukaszSz1.github.ChessGame.game.ChessboardPaint;
 import LukaszSz1.github.ChessGame.model.Chessboard;
-import LukaszSz1.github.ChessGame.model.PiecesController;
-import LukaszSz1.github.ChessGame.services.TimeCounter;
+import LukaszSz1.github.ChessGame.model.ChessboardInitializer;
+import LukaszSz1.github.ChessGame.services.ChessboardService;
+import LukaszSz1.github.ChessGame.services.ChessboardPainterService;
+import LukaszSz1.github.ChessGame.services.PieceMovesService;
+import LukaszSz1.github.ChessGame.services.KingStateService;
+import LukaszSz1.github.ChessGame.services.TimeService;
+import LukaszSz1.github.ChessGame.services.TurnService;
 import LukaszSz1.github.ChessGame.states.GameState;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -42,65 +45,53 @@ public class ChessboardViewController {
     @FXML
     private Button giveUpButton;
 
-    Chessboard chessboard = new Chessboard();
+    Chessboard chessboard;
+    TurnService turnService;
+    KingStateService kingStateService;
+    GameState gameState;
+    ChessboardInitializer chessboardInitializer;
+    ChessboardPainterService chessboardPainterService;
+    PieceMovesService pieceMovesService;
+    ChessboardService chessboardService;
 
-    GameState gameState = new GameState(this);
-
-
-
-    PiecesController piecesController = new PiecesController(gameState, chessboard);
-
-    ChessboardPaint chessboardPaint = new ChessboardPaint(chessboard, gameState, piecesController);
+    ChessboardViewController(final Chessboard chessboard, final TurnService turnService, final KingStateService kingStateService,
+                             final GameState gameState, final ChessboardInitializer chessboardInitializer,
+                             final ChessboardPainterService chessboardPainterService, final PieceMovesService pieceMovesService,
+                             final ChessboardService chessboardService) {
+        this.chessboard = chessboard;
+        this.turnService = turnService;
+        this.kingStateService = kingStateService;
+        this.gameState = gameState;
+        this.chessboardInitializer = chessboardInitializer;
+        this.chessboardPainterService = chessboardPainterService;
+        this.pieceMovesService = pieceMovesService;
+        this.chessboardService = chessboardService;
+    }
 
     @FXML
     public void initialize() {
-        pane.getChildren().setAll(chessboardPaint);
-        gameState.printMessage();
+        pane.getChildren().setAll(chessboardService);
+        messageDisplay.setText(gameState.printMessage());
     }
-
 
     @FXML
     void giveUpButtonClick() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("End Game");
-        alert.setContentText("Press OK to confirm.");
-//        Optional<ButtonType> result = alert.showAndWait();
     }
 
     @FXML
     void restartGameButtonClick() {
-
-        Chessboard restartChessboard = new Chessboard();
-        GameState restartGameState = new GameState(this);
-        PiecesController restartPiecesController = new PiecesController(restartGameState, restartChessboard);
-        ChessboardPaint restartChessboardPaint = new ChessboardPaint(restartChessboard, restartGameState, restartPiecesController);
-
-        if (callGameTimeDialogWindow(restartChessboard, restartPiecesController)) {
-            pane.getChildren().setAll(restartChessboardPaint);
-            piecesController.initializeChessboard();
-            gameState.printMessage();
-            startGameButton.setDisable(true);
-            restartGameButton.setDisable(false);
-            giveUpButton.setDisable(false);
-        }
-
-        chessboardPaint.drawPiecesOnChessBoard();
     }
 
     @FXML
     void startGameButtonClick() {
-        if (callGameTimeDialogWindow(chessboard, piecesController)) {
-            // add ChessBoardPaint to Pane
-            pane.getChildren().setAll(chessboardPaint);
-            piecesController.initializeChessboard();
-            // enable displaying messages
-            gameState.printMessage();
-            // disable/enable buttons
+        if (callGameTimeDialogWindow()) {
+            chessboardInitializer.initializeChessboard();
+            messageDisplay.setText(gameState.printMessage());
             startGameButton.setDisable(true);
             restartGameButton.setDisable(false);
             giveUpButton.setDisable(false);
         }
-        chessboardPaint.drawPiecesOnChessBoard();
+        chessboardService.initializeStartGame();
     }
 
     public TextField getPlayerWhiteTimeCounter() {
@@ -111,11 +102,7 @@ public class ChessboardViewController {
         return playerBlackTimeCounter;
     }
 
-    public TextField getMessageDisplay() {
-        return messageDisplay;
-    }
-
-    private boolean callGameTimeDialogWindow(Chessboard chessboard, PiecesController piecesController) {
+    private boolean callGameTimeDialogWindow() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Choose Game Time");
 
@@ -138,17 +125,17 @@ public class ChessboardViewController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             int chosenTimeValue = gameTimeDialogWindowController.getChosenTime();
             // start timeCounter thread
-            TimeCounter timeCounter = new TimeCounter(this, chosenTimeValue, piecesController);
-            timeCounter.start();
+            TimeService timeService = new TimeService(this, chosenTimeValue, turnService);
+            timeService.start();
             return true;
         } else {
             return false;
         }
-
     }
 
-    public PiecesController getPiecesController() {
-        return piecesController;
+    @FXML
+    void mouseClickedEvent() {
+        messageDisplay.setText(gameState.printMessage());
     }
 }
 
